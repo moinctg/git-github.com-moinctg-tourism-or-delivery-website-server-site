@@ -41,7 +41,7 @@ async function run() {
         await client.connect();
         const database = client.db('CourierService');
         const usersCollection = database.collection('services');
-        const orderCollection = database.collection('orders');
+        // const orderCollection = database.collection('orders');
 
 
 
@@ -53,13 +53,21 @@ const cursor = usersCollection.find({});
 const service = await cursor.toArray();
 res.send(service);
 });
-//  orders get API 
-app.get('/services', async(req,res)=>{
 
-const cursor = orderCollection.find({});
-const service = await cursor.toArray();
-res.send(service);
-});
+app.get('/orders', async(req,res)=>{
+
+    const cursor = usersCollection.find({});
+    const service = await cursor.toArray();
+    res.send(service);
+    });
+
+//  orders get API 
+// app.get('/services', async(req,res)=>{
+
+// const cursor = orderCollection.find({});
+// const service = await cursor.toArray();
+// res.send(service);
+// });
 
 // Get single Services 
 app.get('/services/:id',async(req,res)=>{
@@ -69,14 +77,26 @@ app.get('/services/:id',async(req,res)=>{
     res.json(service)
 
 })
-// Orders Single GET 
 app.get('/orders/:id',async(req,res)=>{
     const id = req.params.id;
     const query = {_id:ObjectId(id)};
-    const service = await orderCollection.findOne(query);
+    const service = await usersCollection.findOne(query);
     res.json(service)
 
 })
+
+
+
+
+
+// // Orders Single GET 
+// // app.get('/orders/:id',async(req,res)=>{
+// //     const id = req.params.id;
+// //     const query = {_id:ObjectId(id)};
+// //     const service = await orderCollection.findOne(query);
+// //     res.json(service)
+
+// })
 //    Post API
 
 app.post('/services',async(req,res)=>{
@@ -88,13 +108,13 @@ res.json(result);
 })
 //   Orders  Post API
 
-app.post('/orders',async(req,res)=>{
-const query = req.body;
-const result = await orderCollection.insertOne(query)
-console.log('hitting the clint',result);
-res.json(result);
+// app.post('/orders',async(req,res)=>{
+// const query = req.body;
+// const result = await orderCollection.insertOne(query)
+// console.log('hitting the clint',result);
+// res.json(result);
 
-})
+// })
 
 // Delete API
 
@@ -109,7 +129,7 @@ app.delete('/services/:id', async(req,res)=>{
 })
 //Order  Delete API
 
-app.delete('/services/:id', async(req,res)=>{
+app.delete('/orders/:id', async(req,res)=>{
     const id = req.params.id;
     const query = {_id:ObjectId(id)};
     const result = orderCollection.deleteOne(query);
